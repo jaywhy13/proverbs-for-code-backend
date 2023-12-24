@@ -11,8 +11,23 @@ dotenv.config()
 const app: Express = express();
 const PORT = process.env.PORT;
 
+/**
+  * Add a JSON middleware that intercepts and
+  * parses requests that have application/json
+  * as their content type.
+  * This enables us to get JSON from request.body.
+  */
+app.use(express.json())
 
-app.get('/', (req: Request, res: Response) => {
+// Add CORS headers so clients can reach us
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", process.env.ALLOW_ORIGIN!);
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
+
+app.get('/', async (req: Request, res: Response) => {
   res.send('Express & Typescript server');
 })
 
