@@ -32,9 +32,9 @@ app.get('/', async (req: Request, res: Response) => {
 })
 
 app.post('/suggestions', async (req, res) => {
-  console.log("Got a request for suggestions", req)
+  console.log("Got a request for suggestions", req.body)
   const lesson = req.body.lesson;
-  const numberOfProverbs = 5;
+  const numberOfProverbs = req.body.numberOfProverbs;
   const excludeSuggestions: Suggestion[] = [];
 
   const suggestions = await suggestionService.getSuggestions({ lesson, numberOfProverbs, excludeSuggestions })
