@@ -30,8 +30,9 @@ export class LLMClient {
       systemMessageFromPrompt,
       outputInstructionsMessage,
     ]);
+
     console.log("Got back response:\n", result.content);
-    const structuredOutput = await outputParser.parse(result.content);
+    const structuredOutput = await outputParser.parse(result.content.toString());
 
     return structuredOutput;
   }
