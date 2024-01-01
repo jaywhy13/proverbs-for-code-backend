@@ -34,7 +34,7 @@ Don't use any of the following proverbs:
 ~~~
 `;
 
-const outputSchema = z.object({
+export const SUGGESTIONS_OUTPUT_SCHEMA = z.object({
   suggestions: z
     .array(
       z.object({
@@ -62,7 +62,7 @@ const outputSchema = z.object({
     .optional(),
 });
 
-const promptTemplate = new PromptTemplate({
+const suggestionPromptTemplate = new PromptTemplate({
   template: PROMPT_TEMPLATE_STRING,
   inputVariables: [
     "lesson",
@@ -73,6 +73,15 @@ const promptTemplate = new PromptTemplate({
 });
 
 export class LLMSuggestionService implements SuggestionService {
+
+  llmClient: LLMClient
+  promptTemplate: PromptTemplate
+
+  public constructor({ llmClient, promptTemplate }: { llmClient?: LLMClient, promptTemplate?: PromptTemplate }) {
+    this.llmClient = llmClient || new LLMClient();
+    this.promptTemplate = promptTemplate || suggestionPromptTemplate;
+  }
+
   /*
    * Generates a prompt for based on a template
    */
@@ -110,10 +119,9 @@ export class LLMSuggestionService implements SuggestionService {
       numberOfProverbs,
       excludeSuggestions,
     });
-    const llmClient = new LLMClient();
-    const structuredOutput = await llmClient.getResponseForPrompt(
+    const structuredOutput = await this.llmClient.getResponseForPrompt(
       prompt,
-      outputSchema,
+      SUGGESTIONS_OUTPUT_SCHEMA,
     );
     if (structuredOutput.error) {
       throw new Error(structuredOutput.error);
@@ -131,5 +139,5 @@ export class LLMSuggestionService implements SuggestionService {
   }
 }
 
-const suggestionService: SuggestionService = new LLMSuggestionService();
+const suggestionService: SuggestionService = new LLMSuggestionService({});
 export default suggestionService;
