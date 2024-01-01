@@ -7,7 +7,7 @@
     "test": "jest",
     "start": "node -r ./tracing.js dist/index.js",
     "build": "npx tsc",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon --exec babel-node src/index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -19,8 +19,12 @@
     "langchain": "^0.0.209"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.6",
+    "@babel/preset-env": "^7.23.6",
+    "@babel/preset-typescript": "^7.23.3",
     "@types/express": "^4.17.21",
     "@types/node": "^20.10.5",
+    "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "nodemon": "^3.0.2",
     "ts-node": "^10.9.2",
