@@ -126,7 +126,7 @@ export class LLMSuggestionService implements SuggestionService {
     if (structuredOutput.error) {
       throw new Error(structuredOutput.error);
     } else {
-      const remoteSuggestions = structuredOutput.suggestions;
+      const remoteSuggestions = structuredOutput.suggestions || [];
       return remoteSuggestions.map((remoteSuggestion) => ({
         id: v4(),
         proverb: {
