@@ -92,14 +92,14 @@ export class LLMSuggestionService implements SuggestionService {
   }: {
     lesson: string;
     numberOfProverbs: number;
-    excludeSuggestions: Array<Suggestion>;
+    excludeSuggestions?: Suggestion[];
   }): Promise<string> {
-    const prompt = await promptTemplate.format({
+    const excludeProverbs = (excludeSuggestions || []).map((excludedSuggestion) => excludedSuggestion.proverb)
+      .join("\n")
+    const prompt = await suggestionPromptTemplate.format({
       number_of_proverbs_to_consider: numberOfProverbs * 2,
       number_of_proverbs_to_return: numberOfProverbs,
-      exclude_proverbs: excludeSuggestions
-        .map((excludedSuggestion) => excludedSuggestion.proverb)
-        .join("\n"),
+      exclude_proverbs: excludeProverbs,
       lesson,
     });
     return prompt;
@@ -112,7 +112,7 @@ export class LLMSuggestionService implements SuggestionService {
   }: {
     lesson: string;
     numberOfProverbs: number;
-    excludeSuggestions: Array<Suggestion>;
+    excludeSuggestions: Suggestion[];
   }): Promise<Suggestion[]> {
     const prompt = await this.generatePrompt({
       lesson,
