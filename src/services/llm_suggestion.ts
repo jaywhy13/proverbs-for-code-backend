@@ -1,4 +1,4 @@
-import { Suggestion } from "../constants";
+import { RemoteGetSuggestionResponse, Suggestion } from "../constants";
 import { PromptTemplate } from "langchain/prompts";
 import { z } from "zod";
 import { v4 } from "uuid";
@@ -62,6 +62,7 @@ export const SUGGESTIONS_OUTPUT_SCHEMA = z.object({
     .optional(),
 });
 
+
 const suggestionPromptTemplate = new PromptTemplate({
   template: PROMPT_TEMPLATE_STRING,
   inputVariables: [
@@ -105,6 +106,9 @@ export class LLMSuggestionService implements SuggestionService {
     return prompt;
   }
 
+  /**
+  * Provides a list of suggestions from the LLM Client
+  */
   public async getSuggestions({
     lesson,
     numberOfProverbs,
@@ -119,14 +123,14 @@ export class LLMSuggestionService implements SuggestionService {
       numberOfProverbs,
       excludeSuggestions,
     });
-    const structuredOutput = await this.llmClient.getResponseForPrompt(
+    const remoteGetSuggestionsResponse: RemoteGetSuggestionResponse = await this.llmClient.getResponseForPrompt(
       prompt,
       SUGGESTIONS_OUTPUT_SCHEMA,
     );
-    if (structuredOutput.error) {
-      throw new Error(structuredOutput.error);
+    if (remoteGetSuggestionsResponse.error) {
+      throw new Error(remoteGetSuggestionsResponse.error);
     } else {
-      const remoteSuggestions = structuredOutput.suggestions || [];
+      const remoteSuggestions = remoteGetSuggestionsResponse.suggestions;
       return remoteSuggestions.map((remoteSuggestion) => ({
         id: v4(),
         proverb: {
