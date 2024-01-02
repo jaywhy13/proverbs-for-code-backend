@@ -12,10 +12,10 @@ const llmModel = new ChatOpenAI({
 });
 
 export class LLMClient {
-  public async getResponseForPrompt<SchemaDefinition>(
+  public async getResponseForPrompt<ObjectForSchema>(
     prompt: string,
-    outputSchema: Schema<SchemaDefinition>,
-  ): Promise<SchemaDefinition> {
+    outputSchema: Schema<ObjectForSchema>,
+  ): Promise<ObjectForSchema> {
     const outputParser = StructuredOutputParser.fromZodSchema(outputSchema);
 
     const outputFixingParser = OutputFixingParser.fromLLM(
