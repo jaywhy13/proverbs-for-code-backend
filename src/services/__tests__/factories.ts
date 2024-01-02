@@ -1,4 +1,5 @@
 import { PromptTemplate } from "langchain/prompts";
+import { RemoteGetSuggestionResponse } from "../../constants";
 
 const PROMPT_TEMPLATE_STRING = `
 I want to summarize lessons I've learned as proverbs. You will be provided
@@ -39,6 +40,31 @@ export class PromptTemplateMockFactory {
         "exclude_proverbs",
       ],
     });
+
+  }
+}
+
+
+export class RemoteGetSuggestionsResponseFactory {
+  public static createWithSingleSuggestion(
+    { proverb, meaning, relation }: { proverb: string; meaning: string; relation: string }): RemoteGetSuggestionResponse {
+    return {
+      "suggestions": [
+        {
+          proverb,
+          meaning,
+          relation,
+        }
+      ],
+      "error": ""
+    }
+  }
+
+  public static createWithError({ error }: { error: string; }): RemoteGetSuggestionResponse {
+    return {
+      suggestions: [],
+      error,
+    }
 
   }
 }
