@@ -28,7 +28,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', async (req: Request, res: Response) => {
-  res.send('Express & Typescript server');
+  res.send('Welcome to Code for Proverbs');
 })
 
 app.post('/suggestions', async (req, res) => {
