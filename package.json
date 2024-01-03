@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "node -r ./tracing.js dist/index.js",
-    "build": "npx tsc",
+    "build": "npx babel src --out-dir dist --extensions '.ts,.tsx'",
     "dev": "nodemon --exec babel-node src/index.ts"
   },
   "author": "",
@@ -19,6 +19,7 @@
     "langchain": "^0.0.209"
   },
   "devDependencies": {
+    "@babel/cli": "^7.23.4",
     "@babel/core": "^7.23.6",
     "@babel/preset-env": "^7.23.6",
     "@babel/preset-typescript": "^7.23.3",
